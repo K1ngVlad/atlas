@@ -24,7 +24,6 @@ export const Header: FC = () => {
 
   const submitHandler = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSearhText('');
 
     const foundOrgans = ORGAN_CONFIGS.filter((organ) => {
       const organName = organ.name.trim().toLocaleLowerCase();
