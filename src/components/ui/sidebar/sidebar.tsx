@@ -71,11 +71,37 @@ export const Sidebar = () => {
         return (
           <>
             <Typography variant="h4">Результаты поиска</Typography>
-            <List>
-              {foundOrgans.map((organModelName, index) => {
-                const organ = ORGAN_MAP_BY_MODEL_NAME.get(organModelName);
+            <div className={styles.listWrapper}>
+              <List className={styles.list}>
+                {foundOrgans.map((organModelName, index) => {
+                  const organ = ORGAN_MAP_BY_MODEL_NAME.get(organModelName);
 
-                if (organ) {
+                  if (organ) {
+                    return (
+                      <Fragment key={organModelName}>
+                        {index > 0 && <Divider />}
+                        <ListItem>
+                          <ListItemButton
+                            onClick={() => {
+                              setSelectedOrgan(organModelName);
+                              setViewMode(ViewMode.ORGAN_INFO);
+                              setSelectedSystems((systems) => {
+                                if (systems.includes(organ.systemName))
+                                  return systems;
+                                return [...systems, organ.systemName];
+                              });
+                            }}
+                          >
+                            <ListItemIcon>
+                              <OrganIcon />
+                            </ListItemIcon>
+                            {organ.name}
+                          </ListItemButton>
+                        </ListItem>
+                      </Fragment>
+                    );
+                  }
+
                   return (
                     <Fragment key={organModelName}>
                       {index > 0 && <Divider />}
@@ -84,40 +110,16 @@ export const Sidebar = () => {
                           onClick={() => {
                             setSelectedOrgan(organModelName);
                             setViewMode(ViewMode.ORGAN_INFO);
-                            setSelectedSystems((systems) => {
-                              if (systems.includes(organ.systemName))
-                                return systems;
-                              return [...systems, organ.systemName];
-                            });
                           }}
                         >
-                          <ListItemIcon>
-                            <OrganIcon />
-                          </ListItemIcon>
-                          {organ.name}
+                          Неизвестный орган
                         </ListItemButton>
                       </ListItem>
                     </Fragment>
                   );
-                }
-
-                return (
-                  <Fragment key={organModelName}>
-                    {index > 0 && <Divider />}
-                    <ListItem>
-                      <ListItemButton
-                        onClick={() => {
-                          setSelectedOrgan(organModelName);
-                          setViewMode(ViewMode.ORGAN_INFO);
-                        }}
-                      >
-                        Неизвестный орган
-                      </ListItemButton>
-                    </ListItem>
-                  </Fragment>
-                );
-              })}
-            </List>
+                })}
+              </List>
+            </div>
           </>
         );
       }
